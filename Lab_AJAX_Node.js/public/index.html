@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .task-description,
+        .list-group {
+            font-size: 1.25em;
+        }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>AJAX Lab</h2>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#conceptTab">Concept</a></li>
+            <li><a href="#getTab">GET</a></li>
+            <li><a href="#postTab">POST</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="conceptTab" class="tab-pane fade in active">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="textinput">Your name:</label>
+                        <div class="col-md-4">
+                            <input name="txtTest" id="txtTest" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="textinput">Other data:</label>
+                        <div class="col-md-4">
+                            <input name="txtOther" id="txtOther" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="button1id" name="button1id" class="btn btn-danger"
+                                onclick='MakeRequestSync()'>Hello</button>
+                            <button type="button" id="button2id" name="button2id" class="btn btn-success"
+                                onclick='MakeRequestAsync()'>Hello (AJAX)</button> &nbsp;
+                            <span id='ResponseDiv'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of conceptTab -->
+
+            <div id="getTab" class="tab-pane fade">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="nameTextBox">Your name:</label>
+                        <div class="col-md-4">
+                            <input name="nameTextBox" id="nameTextBox" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="otherTextBox">Other data:</label>
+                        <div class="col-md-4">
+                            <input name="otherTextBox" id="otherTextBox" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="getButton" name="getButton" class="btn btn-success">Hello --
+                                $.get()</button> &nbsp;
+                            <span id='reportSpan'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of getTab -->
+
+            <div id="postTab" class="tab-pane fade">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="firstNameTextBox">FirstName:</label>
+                        <div class="col-md-4">
+                            <input name="firstNameTextBox" id="firstNameTextBox" type="text"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="lastNameTextBox">LastName:</label>
+                        <div class="col-md-4">
+                            <input name="lastNameTextBox" id="lastNameTextBox" type="text"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="postButton" name="postButton" class="btn btn-success">Hello --
+                                $.post(), $.ajax()</button> &nbsp;
+                            <span id='resultSpan'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of postTab -->
+
+        </div>
+    </div>
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='js/ajax_concept.js'></script>
+
+
+    <!-- $Ajax、await -->
+    <script>
+        $(document).ready(function () {
+            $(".nav-tabs a").click(function () {
+                $(this).tab('show');
+            });
+
+            // ---------- GET ---------- //
+            $("#getButton").on("click", function () {
+                var s = $("#nameTextBox").val(); // 從 #nameTextBox 獲取值
+
+                var toWhere = `http://localhost:80/hello/${s}`;
+                // 用輸入值建造一個 URL，並向其發送一個 GET 請求
+                $.get(toWhere, function (dataFromServer) {
+                    $("#reportSpan").text(dataFromServer);
+                })
+                // 使用 $.get 發起請求到 toWhere 指定的 URL
+                // 並在 #reportSpan 以文本將其顯示出來
+            })
+
+            // ---------- POST-$.ajax ---------- //
+            // $("#postButton").on("click", function () {
+            //     var dataToServer = {
+            //         firstName: $("#firstNameTextBox").val(),
+            //         lastName: $("#lastNameTextBox").val()
+            //     }
+
+            //     $.ajax({
+            //         type: "post", // post, get, put, delete   CRUD
+            //         url: "http://localhost:80/test2", // 可以直接寫./test2
+            //         // contentType: "application/json",
+            //         headers: {
+            //             "Content-type": "application/json", // 指定內容為 jason 格式
+            //             "prefix": "Teacher" // 自訂標頭的字段
+            //         },
+            //         data: JSON.stringify(dataToServer), // 將 JS 對象轉乘 jason 字符串 (自動轉換)
+            //         // Content-Type 告訴伺服器用什麼格式解讀
+            //         // JSON.stringify() 是將數據轉換為其格式
+            //         success: function (dataFromServer) {
+            //             $("#resultSpan").text(dataFromServer + " -- ver 2.5");
+            //             // 若請求成功則在 #resultSpan 以文本顯示後面的內容
+            //         }
+            //     })
+
+            //     // URL 與 JASON 格式
+            //     // firstName=Richard&lastName=Chyan&zip=404&weight=60
+            //     // { "firstName": "Richard", "lastName": "Chyan", "zip": "404", "weight": 60, placeList: [{},{},{}] }
+            // })
+
+            // ---------- POST-await (簡化異步操作的代碼) 提高可讀與可維護性---------- //
+            // $("#postButton").on("click", async function () {
+            //     var dataToServer = {
+            //         firstName: $("#firstNameTextBox").val(),
+            //         lastName: $("#lastNameTextBox").val()
+            //     }
+
+            //     var result = await $.ajax({
+            //         type: "post",
+            //         url: "/test",
+            //         data: JSON.stringify(dataToServer),
+            //         contentType: "application/json"
+            //     });
+
+            //     $("#resultSpan").text(result);
+            // })
+
+
+            // ---------- POST-axios ---------- //
+            // axios 用於發送 HTTP 請求和處理響應 ex. 請求攔截器、響應攔截器、自動轉換 JSON
+            $("#postButton").on("click", async function () {
+                var dataToServer = {
+                    firstName: $("#firstNameTextBox").val(),
+                    lastName: $("#lastNameTextBox").val()
+                }
+
+                var result = await axios.post(
+                    "http://localhost:80/test2",
+                    JSON.stringify(dataToServer),
+                    {
+                        headers: {
+                            "Content-type": "application/json",
+                            "prefix": "Mr."
+                        }
+                    }
+                )
+                $("#resultSpan").text(result.data + " -- ver 3.0 ");
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>
