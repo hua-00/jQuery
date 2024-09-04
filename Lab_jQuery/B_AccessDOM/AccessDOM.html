@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#btnTry").click(function () {
+
+        // 筆記 //
+        // $("selector").action();
+        // $("#report").text(" ");
+        // $("#report").html(" ");
+        // $("#report").append(" ");
+        // $(selector).attr(attribute,value);
+        // $(selector).prop(attribute,value);
+        // ep(數字);
+
+
+        // $("#report").text("jQuery Class QQ");
+        // var s = $("#report").text();
+        // alert(s);
+
+        // $("#report").text("line1<br>Line2"); // <br> 會當成文字
+        // $("#report").html("line1<br>Line2"); // hetml() 可以解讀標籤
+        // $("#report").append("line1<br>Line2"); // 在現有內容後面加入新內容
+
+        // var s = $("#aTextField").prop("value");
+        //         $("#report").append(s);
+
+        // var s = $("#aTextField").prop("value", "Hello!");
+        // var s = $("#aTextField").attr("value", "Hello!");
+
+        var s = $("input[name='radioGroup']").eq(2).attr("checked", "checked");
+        $("#report").append("radio C selected.");
+        // eq(2) -> 選擇第 3 個
+
+
+      })
+    });
+  </script>
+</head>
+
+<body>
+
+
+  <div id="report">Report:<br></div>
+
+  <hr>
+
+  <form action="" method="put" onsubmit="return false;">
+    <div>
+      <label>Text:</label> <input type="text" id="aTextField" name="someTextField" />
+    </div>
+    <div>
+      <label>Radio group:</label>
+      <input type="radio" name="radioGroup" id="radioA" value="65" /> A
+      <input type="radio" name="radioGroup" id="radioB" value="66" checked="checked" /> B
+      <input type="radio" name="radioGroup" id="radioC" value="67" /> C
+    </div>
+    <div>
+      <label>Checkboxes:</label>
+      <input type="checkbox" name="checkboxes" id="checkbox1" value="1" /> 1
+      <input type="checkbox" name="checkboxes" id="checkbox2" value="2" /> 2
+      <input type="checkbox" name="checkboxes" id="checkbox3" value="3" checked="checked" /> 3
+      <input type="checkbox" name="checkboxes" id="checkbox4" value="4" /> 4
+    </div>
+    <button type="button" id="btnTry">Try</button>
+  </form>
+</body>
+
+</html>

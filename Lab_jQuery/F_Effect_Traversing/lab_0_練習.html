@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery.toast.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <h2>哪一隻是貓?</h2>
+        </div>
+
+        <div class="row" id="divPets">
+
+            <div class="col-sm-4">
+                <img id="imgDog" src="images/dog.jpeg" class="pet img-responsive img-thumbnail" data-species="狗" />
+                <!-- data-自訂名稱 -->
+            </div>
+
+            <div class="col-sm-4">
+                <img id="imgCat" src="images/cat.jpeg" class="pet img-responsive img-thumbnail" data-species="貓" />
+            </div>
+
+            <div class="col-sm-4">
+                <img id="imgRabbit" src="images/rabbit.jpeg" class="pet img-responsive img-thumbnail"
+                    data-species="兔兔usaki" />
+            </div>
+
+        </div> <!-- end of row -->
+
+    </div> <!-- end of container -->
+
+
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.toast.js"></script>
+
+    <script>
+        // 使用方式:
+        // showToast("標題", "提示文字") 例如:
+        // showToast("Hint", "請點一下正確的圖案");
+        function showToast(heading, message) {
+            $.toast({
+                text: message, // Text that is to be shown in the toast
+                heading: heading, // Optional heading to be shown on the toast
+                icon: 'warning', // Type of toast icon
+                showHideTransition: 'fade', // fade, slide or plain
+                allowToastClose: true, // Boolean value true or false
+                hideAfter: 2000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                position: 'top-right', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                textAlign: 'left',  // Text alignment i.e. left, right or center
+                loader: true,  // Whether to show loader or not. True by default
+                loaderBg: '#9ec600',  // Background color of the toast loader
+                beforeShow: function () { }, // will be triggered before the toast is shown
+                afterShown: function () { }, // will be triggered after the toat has been shown
+                beforeHide: function () { }, // will be triggered before the toast gets hidden
+                afterHidden: function () { }  // will be triggered after the toast has been hidden
+            });
+        }
+
+        $(function () {
+            $(".pet").mouseenter(function () {
+                $(this).removeClass("img-thumbnail");
+            })
+
+            $(".pet").mouseleave(function () {
+                $(this).addClass("img-thumbnail");
+            })
+
+            //// 選擇三張圖片的迴圈寫法 ////
+            // 用.data(species(key), value)取代上面圖片的data-species //
+
+            // 若三張圖片沒有 id，如何將陣列內容指定給各圖片的species ? //
+
+            // var speciesList = ["狗狗", "貓", "兔兔"];
+            // $(".pet:eq(0)").data("species", "speciesList[0]"); // .data("鍵","值");
+            // $(".pet:eq(1)").data("species", "speciesList[1]");
+            // $(".pet:eq(2)").data("species", "speciesList[2]");
+
+            // 寫法一 :
+            // var speciesList = ["狗狗A", "貓A", "兔兔A"];
+            // for (i = 0; i < speciesList.length; i++) {
+            //     $(".pet:eq(" + i + ")").data("species", speciesList[i]);
+            //     // i 沒有使用 var、let、const 所以不須 + $
+            //     // 會根據變量 i 的值動態生成 jQuery 選擇器
+            // }
+
+            // 寫法二 :
+            // var speciesList = ["狗狗", "貓", "兔兔"];
+            // for (let i = 0; i < speciesList.length; i++) {
+            //     var filter = `.pet:eq(${i})`;
+            //     $(filter).data("species", speciesList[i]);
+            // }
+
+            // 寫法三:
+            // var speciesList = ["狗狗", "貓", "兔兔"];
+            // $(".pet").each(function (key, obj) {
+            //     $(obj).data("species", speciesList[key]);
+            // })
+            var speciesList = ["狗狗", "貓", "兔兔"];
+            $(".pet").each(function (index, what) {
+                $(what).data("species", speciesList[index]);
+            })
+
+            $(".pet").click(function () {
+                // this由上下文決定，這裡的 $(this) 是被 click 的那個元素
+                var species = $(this).data("species");
+                // 用 var species 儲存得到的資料，再用 if 彈出答案
+                if (species != "貓") {
+                    showToast("Hint", "答錯！我是" + species);
+                    $(this).fadeOut("fast");
+                    // 按到錯誤圖片則該圖片消失
+                } else {
+                    showToast("Note", "BINGOOOO！")
+                    // showToast(title, message)
+
+                    // $("#imgDog").FadeTo("fast", "0.50");
+                    // $("#imgRabbit").FadeTo("fast", "0.50");
+                    // 上面這兩行可以改成下面
+                    // 原本: 若選擇X則變淡 / 下面: 若不是選擇Y則都變淡
+                    $(".pet").not("img[data-species='貓']").fadeTo("fast", "0.50");
+                }
+            });
+
+            // $("<li></li>").text("98"); // = <li>98</li>
+        })  // end of init.
+
+    </script>
+
+</body>
+
+</html>
