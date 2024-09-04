@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<div class="container">
+
+
+    <h1>待辦事項清單 - 修改</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form action="/Todo/Edit" method="post">
+
+                <input type="hidden" id="TodoItemId" name="TodoItemId" value="1" />
+                <div class="form-group">
+                    <label class="control-label" for="Name">項目名稱</label>
+                    <input class="form-control" type="text" id="Name" name="Name" value="Job A" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="IsComplete" name="IsComplete"
+                            value="true" /> 是否已完工
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input id="okButton" type="button" value="確定" class="btn btn-outline-primary" /> |
+                    <a href="/index.html" class="btn btn-outline-info">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 從sessionStorage中獲取id，並用這個id構造一個URL
+        var id = sessionStorage.getItem("id");
+        var url = `http://localhost:3000/todo/item/${id}`;
+        // 取得使用者輸入與勾選框的值
+        $.get(url, function (e) {
+            // e 是 $.get() 請求的回調中的參數
+            // console.log(e);
+            $("#Name").prop("value", e.title);
+            $("#IsComplete").prop("checked", e.isComplete)
+            // "checked" 是 <input type="checkbox"> 的屬性
+        })
+
+        $("#okButton").on("click", async function () {
+            var dataToServer = {
+                todoTableId: sessionStorage.getItem("id"),
+                title: $("#Name").prop("value"),
+                isComplete: $("#IsComplete").prop("checked") ? 1 : 0
+            }
+
+            var result = await $.ajax({
+                type: "put",
+                url: "http://localhost:3000/todo/item",
+                contentType: "application/json",
+                // 用JSON格式才能判斷字串1和0，不然都是數字結果都是true
+                data: JSON.stringify(dataToServer)
+            })
+            window.location = "/";
+        })
+    </script>
+
+</div>

@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<div class="container">
+
+    <h1>待辦事項清單 - 新增</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form action="/Todo/Create" method="post">
+
+                <div class="form-group">
+                    <label class="control-label" for="Name">項目名稱</label>
+                    <input class="form-control" type="text" id="Name" name="Name" value="" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="IsComplete" name="IsComplete" value="1" />
+                        是否已完工
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input id="okButton" type="button" value="確定" class="btn btn-outline-primary" /> |
+                    <!-- 若要交給瀏覽器做 -> submit，自己做 -> button -->
+                    <a href="/index.html" class="btn btn-outline-info">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // .prop() 通常用於處理布林屬性（例如 checked 或 disabled）
+    // .val() 是更常用於獲取或設置表單元素的值的函數。
+    $("#okButton").on("click", async function () {
+        // button 點擊事件發生時，執行內部 async 函數
+        var dataToServer = {
+            title: $("#Name").prop("value"),  // .val()
+            // 取得表單元素
+            isComplete: $("#IsComplete").prop("checked") ? 1 : 0
+            // 是否完工的值? 1->完工、0->尚未完工
+        }
+
+        var result = await $.ajax({ // 使用 $.ajax() 發送 AJAX 請求到伺服器
+            type: "post",
+            url: "http://localhost:3000/todo/create", // 請求的 URL
+            contentType: "application/json", // 指定的請求內容類型是 JSON
+            data: JSON.stringify(dataToServer), // 將 dataToServer 轉呈 JASON 字符串，並作為請求體發送
+            // await 等待AJAX請求完成，並將解果儲存在 var result
+        })
+
+        // window.location = "http://localhost:3000/index.html";
+        window.location = "/"; // 將頁面重新定向到主頁 /
+
+        // console.log(result);
+    })
+</script>
